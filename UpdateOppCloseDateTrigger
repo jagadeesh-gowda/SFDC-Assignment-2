@@ -1,0 +1,8 @@
+// Create a trigger that update the 30 days more in ClosedDate when the Opportunity record is created.
+
+trigger UpdateOppCloseDateTrigger on Opportunity (before insert) {
+	
+    for(Opportunity opp: Trigger.new){
+        opp.CloseDate+=30;
+    }
+}
