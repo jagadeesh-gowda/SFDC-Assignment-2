@@ -1,0 +1,34 @@
+//Create a trigger to send an Email alert by using classic email template when the Contact record is created.
+
+trigger SendEmailToContactTrigger on Contact (after insert) {
+    
+    Set<Id> ConId= new Set<Id>();
+    if(Trigger.isInsert){
+        for(Contact con: Trigger.New){
+            if(con.email!=null){
+                ConId.add(con.id);
+            }
+        }
+    }
+    // get a contact List 
+    List<Contact> conList = [select Id, email from Contact Where id IN:ConId];
+    // Contact con = [Select Id, Email from Contact where LastName ='Test'];
+    
+    // get an email template
+    EmailTemplate emailTemp = [Select id, Subject, Body From EmailTemplate Where DeveloperName = 'Sample_Email'];
+    
+    // Create Email List
+    List<Messaging.SingleEmailMessage> emailList = new List<Messaging.SingleEmailMessage>();
+    for(Contact con: conList){
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        mail.setTemplateId(emailTemp.Id);// Set Template id (to select subject and body of email )
+        mail.setTargetObjectId(con.Id);// The ID of the contact, lead, or user to which the email will be sent. 
+                                       //The ID you specify sets the context and ensures that merge fields in the template contain the correct data.
+
+        emailList.add(mail);
+    }
+    //if Email List is not empty, send email
+    if(!emailList.isEmpty()){
+        Messaging.sendEmail(emailList);
+    }    
+}
