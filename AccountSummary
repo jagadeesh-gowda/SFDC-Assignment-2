@@ -1,0 +1,69 @@
+/* •	Create a visualforce Page and populate the 5 field of Account on that VF page. 
+After that create a new button on Account named Save and send email. 
+After clicking on this button, send an email to customer with visualforce page as a pdf attachment 
+and classic email template, also save the visualforce pdf attachment in Files related list.*/
+
+<apex:page title="Account Summary" tabStyle="Account"
+           controller="PdfEmailerController">
+    
+    <apex:pageMessages />
+    
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <!--<apex:commandButton value="Send Email" action="{!sendEmail}"/>-->
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection Title="Account Section">
+                <apex:inputField value="{!account.Name}"/>
+                <apex:inputField value="{!account.Phone}"/>
+                <apex:inputField value="{!account.Website}"/>
+                <apex:inputField value="{!account.Industry}"/>
+                <apex:inputField value="{!account.AnnualRevenue}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    
+    <apex:form >
+        <apex:pageBlock title="Account Summary">
+            
+            <p>Select a recently modified account to summarize.</p>
+            <p/>
+            
+            <apex:pageBlockSection title="Report Format">
+                
+                <!-- Select account menu -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel for="selectedAccount" value="Account"/> 
+                    <apex:selectList id="selectedAccount" value="{! selectedAccount }" 
+                                     size="1">
+                        <apex:selectOption /> <!-- blank by default -->
+                        <apex:selectOptions value="{! recentAccounts }" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <!-- Select report format menu -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel for="selectedReport" value="Summary Format"/> 
+                    <apex:selectList id="selectedReport" value="{! selectedReport }" 
+                                     size="1">
+                        <apex:selectOptions value="{! reportFormats }" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                
+                <!-- Email recipient input field -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel for="recipientEmail" value="Send To"/> 
+                    <apex:inputText value="{! recipientEmail }" size="40"/>
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{! sendReport }" value="Send Account Summary" />
+            </apex:pageBlockButtons>
+            
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>
