@@ -1,0 +1,15 @@
+<apex:page showHeader="false" standardStylesheets="false"
+    standardController="Account">
+    
+    <h1>Account Summary for {! account.Name }</h1>
+    
+    <table>
+        <tr><th>Phone</th>  <td><apex:outputText value="{! account.Phone }"/></td></tr>
+        <tr><th>Website</th><td><apex:outputText value="{! account.Website }"/></td></tr>
+        <tr><th>Industry</th>    <td><apex:outputText value="{! account.Industry }"/></td></tr>
+        <tr><th>Annual Revenue</th>    <td><apex:outputText value="{! account.AnnualRevenue }"/></td></tr>
+    </table>
+
+    <p><apex:outputText value="{! Account.Description }"/></p>
+        
+</apex:page>
